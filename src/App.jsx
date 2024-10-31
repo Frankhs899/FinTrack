@@ -6,9 +6,11 @@ import About from './pages/About';
 import Income from './pages/Income';
 import Expense from './pages/Expense';
 import Transactions from './pages/Transactions';
+import Navbar from './components/navbar/Navbar';
+import Footer from './components/footer/Footer';
 
 function App() {
-  const { theme, handleChangeTheme } = useContext(Context);
+  const { theme } = useContext(Context);
   return (
     <HashRouter>
       <div
@@ -16,13 +18,8 @@ function App() {
           theme === 'dark' ? 'dark' : ''
         }`}
       >
-        App
-        <button
-          className='bg-indigo-500 text-white'
-          onClick={handleChangeTheme}
-        >
-          Theme
-        </button>
+        <Navbar />
+
         <main className='flex flex-grow min-h-full p-4'>
           <Routes>
             <Route
@@ -47,6 +44,8 @@ function App() {
             />
           </Routes>
         </main>
+
+        <Footer />
       </div>
     </HashRouter>
   );

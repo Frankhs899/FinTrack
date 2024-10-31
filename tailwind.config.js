@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
+        secondary: {
           100: '#fbf0ce',
           200: '#f7e19c',
           300: '#f2d16b',
@@ -16,7 +16,7 @@ export default {
           800: '#5e4803',
           900: '#2f2402',
         },
-        secondary: {
+        primary: {
           100: '#eeddfd',
           200: '#dcbbfc',
           300: '#cb99fa',
