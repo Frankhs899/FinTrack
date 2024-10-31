@@ -12,7 +12,7 @@ function App() {
   return (
     <HashRouter>
       <div
-        className={`min-h-screen flex flex-col bg-gray-100 text-gray-950 dark:bg-gray-950 dark:text-gray-50 ${
+        className={`min-h-screen flex flex-col font-[Poppins] bg-gray-100 text-gray-950 dark:bg-gray-950 dark:text-gray-50 ${
           theme === 'dark' ? 'dark' : ''
         }`}
       >
