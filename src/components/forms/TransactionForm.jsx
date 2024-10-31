@@ -1,5 +1,3 @@
-// Localiza cualquier error lógico en el siguiente código
-
 import { useState, useContext } from 'react';
 import { Context } from '../../context/GlobalState';
 
