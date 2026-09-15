@@ -1,6 +1,4 @@
-import { useContext } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
-import { Context } from './context/GlobalState';
 import Home from './pages/Home';
 import About from './pages/About';
 import Income from './pages/Income';
@@ -10,14 +8,9 @@ import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
 
 function App() {
-  const { theme } = useContext(Context);
   return (
     <HashRouter>
-      <div
-        className={`min-h-screen flex flex-col font-[Poppins] bg-gray-100 text-gray-950 dark:bg-gray-950 dark:text-gray-50 ${
-          theme === 'dark' ? 'dark' : ''
-        }`}
-      >
+      <div className='min-h-screen flex flex-col font-[Poppins] bg-gray-100 text-gray-950 dark:bg-gray-950 dark:text-gray-50'>
         <Navbar />
 
         <main className='flex flex-grow min-h-full p-4'>
