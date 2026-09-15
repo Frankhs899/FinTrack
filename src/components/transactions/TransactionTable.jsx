@@ -6,7 +6,7 @@ import TableData from './TableData';
 function TransactionTable() {
   const { transactions } = useContext(Context);
 
-  const sortedTransactions = transactions.sort(
+  const sortedTransactions = [...transactions].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
   );
 
@@ -24,8 +24,8 @@ function TransactionTable() {
           </thead>
 
           <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
-            {transactions.map((transaction, index) => (
-              <tr>
+            {sortedTransactions.map((transaction, index) => (
+              <tr key={transaction.id ?? index}>
                 <TableData data={transaction.date} />
                 <TableData data={transaction.type} />
                 <TableData data={transaction.description} />
