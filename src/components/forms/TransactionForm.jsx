@@ -17,6 +17,10 @@ function TransactionForm() {
       alert('El valor ingresado no es un número válido.');
       return;
     }
+    if (parsedValue <= 0) {
+      alert('El valor debe ser mayor a 0.');
+      return;
+    }
 
     // Creando objeto con los datos de ingreso
     const newIncome = {
@@ -44,6 +48,10 @@ function TransactionForm() {
     const parsedValue = parseFloat(value);
     if (isNaN(parsedValue)) {
       alert('El valor ingresado no es un número válido.');
+      return;
+    }
+    if (parsedValue <= 0) {
+      alert('El valor debe ser mayor a 0.');
       return;
     }
 
