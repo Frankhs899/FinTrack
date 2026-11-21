@@ -1,8 +1,6 @@
 export const INCOME = 'income';
 export const EXPENSE = 'expense';
 
-export const TRANSACTION_TYPES = [INCOME, EXPENSE];
-
 // Display labels stay in Spanish; the stored values stay in English.
 export const TRANSACTION_TYPE_LABELS = {
   [INCOME]: 'Ingreso',
@@ -24,11 +22,14 @@ export const createId = () => {
   return `t-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
 };
 
+// Returns the canonical type, or null when the value cannot be classified.
+// Callers decide what an unrecognized type means; nothing is guessed here, so an
+// unknown stored value can never be counted as income.
 export const normalizeType = (type) => {
   if (typeof type !== 'string') {
-    return INCOME;
+    return null;
   }
-  return TYPE_ALIASES[type.trim().toLowerCase()] ?? INCOME;
+  return TYPE_ALIASES[type.trim().toLowerCase()] ?? null;
 };
 
 export const normalizeTransaction = (record) => {
@@ -37,11 +38,14 @@ export const normalizeTransaction = (record) => {
   }
 
   const value = Number.parseFloat(record.value);
+  const type = normalizeType(record.type);
 
   return {
     id: record.id ?? createId(),
     date: typeof record.date === 'string' ? record.date : '',
-    type: normalizeType(record.type),
+    // An unrecognized type is preserved verbatim: the record stays visible and
+    // fixable, and the derived totals ignore it instead of counting it as income.
+    type: type ?? record.type,
     description:
       typeof record.description === 'string' ? record.description : '',
     value: Number.isFinite(value) ? value : 0,
