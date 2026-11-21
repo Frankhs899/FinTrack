@@ -42,7 +42,8 @@ src/
   main.jsx              # Entry point, mounts GlobalProvider
   App.jsx               # HashRouter + layout (Navbar, Routes, Footer)
   context/
-    GlobalState.jsx     # Single Context: transactions, balance, income, expense, theme
+    context.js          # Creates the Context (own module so the provider file exports a component only)
+    GlobalState.jsx     # GlobalProvider: transactions, balance, income, expense, theme
   pages/                # Home, Income, Expense, Transactions, About
   components/
     balance/ forms/ navbar/ footer/ transactions/
