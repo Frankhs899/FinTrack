@@ -16,7 +16,7 @@ No test runner is configured — don't add test infra unprompted; verify with `b
 - Entry: `src/main.jsx` → `src/App.jsx`. `GlobalProvider` (in `src/context/GlobalState.jsx`) must wrap `App`.
 - Routing: `HashRouter` in `App.jsx` is **required** for GitHub Pages static hosting. Do not switch to `BrowserRouter`.
 - Pages in `src/pages/` (Home, Income, Expense, Transactions, About); shared UI in `src/components/{balance,forms,navbar,footer,transactions}/`.
-- State: single `Context` in `src/context/GlobalState.jsx`. `transactions`, `balance`, `income`, `expense`, `theme` are independent `useState` values each persisted to `localStorage` under the same key names. Totals are stored, not derived — any change to transactions must also update the matching totals or they drift.
+- State: single `Context` in `src/context/GlobalState.jsx`. `transactions` and `theme` are independent `useState` values persisted to `localStorage` under the same key names. `balance`, `income` and `expense` are derived from `transactions` on read (via `useMemo`); they are never stored. Legacy `localStorage` keys `balance`, `income` and `expense` are ignored and left in place — never deleted, no migration written.
 - Theme: Tailwind `darkMode: 'class'`; the provider toggles `dark` on `<html>` via effect, and `App.jsx` also toggles it on the wrapper div. Keep both in sync; init prefers stored `theme`, then `prefers-color-scheme`.
 
 ## Conventions / gotchas

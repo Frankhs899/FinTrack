@@ -6,7 +6,7 @@ A simple personal finance tracker to record income and expenses, built with Reac
 
 - Record income and expense transactions with date, description, and amount
 - Transaction history sorted by date
-- Balance, income, and expense totals persisted in `localStorage`
+- Transaction list persisted in `localStorage`; balance, income, and expense totals derived from it on read
 - Dark / light theme (stored preference, falls back to `prefers-color-scheme`)
 - Client-side routing with `HashRouter` for static hosting
 
@@ -50,8 +50,8 @@ src/
 
 ## State Notes
 
-- `transactions`, `balance`, `income`, `expense`, and `theme` are independent `useState` values, each persisted to `localStorage` under the same key.
-- Totals are stored, not derived. Any change to transactions must also update the matching totals or they drift.
+- `transactions` and `theme` are independent `useState` values, each persisted to `localStorage` under the same key.
+- `balance`, `income`, and `expense` are derived from `transactions` on read (via `useMemo`); they are never stored. Legacy `localStorage` keys `balance`, `income`, and `expense` are ignored and left in place — never deleted, no migration written.
 - Transaction amounts must be positive numbers; non-positive values are rejected at the form level.
 
 ## Theme

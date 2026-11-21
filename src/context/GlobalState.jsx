@@ -1,11 +1,11 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
+  EXPENSE,
   INCOME,
   createId,
   loadStoredTransactions,
   normalizeType,
-  readStoredNumber,
 } from '../lib/transactions';
 
 export const Context = createContext();
@@ -24,9 +24,29 @@ const readInitialTheme = () => {
 export const GlobalProvider = ({ children }) => {
   const [theme, setTheme] = useState(readInitialTheme);
   const [transactions, setTransactions] = useState(loadStoredTransactions);
-  const [balance, setBalance] = useState(() => readStoredNumber('balance'));
-  const [income, setIncome] = useState(() => readStoredNumber('income'));
-  const [expense, setExpense] = useState(() => readStoredNumber('expense'));
+
+  const { balance, income, expense } = useMemo(() => {
+    if (!Array.isArray(transactions)) {
+      return { balance: 0, income: 0, expense: 0 };
+    }
+    let incomeTotal = 0;
+    let expenseTotal = 0;
+    for (const transaction of transactions) {
+      const amount = Number.isFinite(transaction?.value)
+        ? transaction.value
+        : 0;
+      if (transaction?.type === INCOME) {
+        incomeTotal += amount;
+      } else if (transaction?.type === EXPENSE) {
+        expenseTotal += amount;
+      }
+    }
+    return {
+      income: incomeTotal,
+      expense: expenseTotal,
+      balance: incomeTotal - expenseTotal,
+    };
+  }, [transactions]);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
@@ -36,26 +56,14 @@ export const GlobalProvider = ({ children }) => {
     localStorage.setItem('transactions', JSON.stringify(transactions));
   }, [transactions]);
 
-  useEffect(() => {
-    localStorage.setItem('balance', balance.toString());
-  }, [balance]);
-
-  useEffect(() => {
-    localStorage.setItem('income', income.toString());
-  }, [income]);
-
-  useEffect(() => {
-    localStorage.setItem('expense', expense.toString());
-  }, [expense]);
-
   const handleChangeTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
   };
 
-  // Single entry point for adding a movement: it keeps the transaction list and
-  // the stored totals in sync, so no caller has to update them by hand.
+  // Single entry point for adding a movement: it appends to the transaction list;
+  // totals are derived from that list via useMemo.
   const addTransaction = (type, { date, description, value }) => {
     const normalizedType = normalizeType(type);
     const amount = Number.parseFloat(value);
@@ -73,14 +81,6 @@ export const GlobalProvider = ({ children }) => {
         value: amount,
       },
     ]);
-
-    if (normalizedType === INCOME) {
-      setIncome((prevIncome) => prevIncome + amount);
-      setBalance((prevBalance) => prevBalance + amount);
-    } else {
-      setExpense((prevExpense) => prevExpense + amount);
-      setBalance((prevBalance) => prevBalance - amount);
-    }
   };
 
   return (

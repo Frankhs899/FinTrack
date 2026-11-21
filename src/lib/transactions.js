@@ -48,11 +48,6 @@ export const normalizeTransaction = (record) => {
   };
 };
 
-export const readStoredNumber = (key, storage = localStorage) => {
-  const parsed = Number.parseFloat(storage.getItem(key));
-  return Number.isFinite(parsed) ? parsed : 0;
-};
-
 export const loadStoredTransactions = (storage = localStorage) => {
   const raw = storage.getItem('transactions');
   if (!raw) {
