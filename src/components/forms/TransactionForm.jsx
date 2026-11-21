@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Context } from '../../context/GlobalState';
+import { Context } from '../../context/context';
 import { EXPENSE, INCOME } from '../../lib/transactions';
 
 const INPUT_CLASSES =
