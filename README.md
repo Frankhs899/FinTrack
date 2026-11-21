@@ -52,7 +52,7 @@ src/
 ## State Notes
 
 - `transactions` and `theme` are independent `useState` values, each persisted to `localStorage` under the same key.
-- `balance`, `income`, and `expense` are derived from `transactions` on read (via `useMemo`); they are never stored. Legacy `localStorage` keys `balance`, `income`, and `expense` are ignored and left in place — never deleted, no migration written.
+- `balance`, `income`, and `expense` are derived from `transactions` on read (via `useMemo`); they are never stored. Legacy `localStorage` keys `balance`, `income`, and `expense` are ignored and left in place — never deleted, no migration written. A stored transaction whose `type` is not recognizable (after `TYPE_ALIASES`) is preserved verbatim: it stays in the list, is excluded from `income`/`expense`, and is never coerced to `income` nor deleted.
 - Transaction amounts must be positive numbers; non-positive values are rejected at the form level.
 
 ## Theme

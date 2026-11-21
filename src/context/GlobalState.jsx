@@ -66,7 +66,7 @@ export const GlobalProvider = ({ children }) => {
   const addTransaction = (type, { date, description, value }) => {
     const normalizedType = normalizeType(type);
     const amount = Number.parseFloat(value);
-    if (!Number.isFinite(amount)) {
+    if (normalizedType === null || !Number.isFinite(amount)) {
       return;
     }
 
