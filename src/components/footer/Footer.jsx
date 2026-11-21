@@ -22,10 +22,6 @@ function Footer() {
               link={'/about'}
               label={'Acerca de'}
             />
-            <LinkFooter
-              link={'/about'}
-              label={'Contacto'}
-            />
           </ul>
         </div>
       </div>
