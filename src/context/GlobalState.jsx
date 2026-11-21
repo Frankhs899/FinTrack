@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   EXPENSE,
@@ -7,8 +7,7 @@ import {
   loadStoredTransactions,
   normalizeType,
 } from '../lib/transactions';
-
-export const Context = createContext();
+import { Context } from './context';
 
 const readInitialTheme = () => {
   const storedTheme = localStorage.getItem('theme');

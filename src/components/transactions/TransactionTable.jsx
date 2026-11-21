@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from '../../context/GlobalState';
+import { Context } from '../../context/context';
 import TableHeader from './TableHeader';
 import TableData from './TableData';
 import { TRANSACTION_TYPE_LABELS } from '../../lib/transactions';

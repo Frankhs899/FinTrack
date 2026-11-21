@@ -10,7 +10,7 @@ function Footer() {
             © 2024{' '}
             <Link
               to='/'
-              class='hover:underline hover:text-primary-500 dark:hover:text-secondary-500'
+              className='hover:underline hover:text-primary-500 dark:hover:text-secondary-500'
             >
               FinTrack
             </Link>
