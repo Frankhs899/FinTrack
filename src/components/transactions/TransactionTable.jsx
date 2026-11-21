@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { Context } from '../../context/GlobalState';
 import TableHeader from './TableHeader';
 import TableData from './TableData';
+import { TRANSACTION_TYPE_LABELS } from '../../lib/transactions';
 
 function TransactionTable() {
   const { transactions } = useContext(Context);
@@ -27,7 +28,11 @@ function TransactionTable() {
             {sortedTransactions.map((transaction, index) => (
               <tr key={transaction.id ?? index}>
                 <TableData data={transaction.date} />
-                <TableData data={transaction.type} />
+                <TableData
+                  data={
+                    TRANSACTION_TYPE_LABELS[transaction.type] ?? transaction.type
+                  }
+                />
                 <TableData data={transaction.description} />
                 <TableData data={`$ ${transaction.value}`} />
               </tr>
