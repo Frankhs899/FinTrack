@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 function LinkFooter({ label, link }) {
@@ -13,5 +13,10 @@ function LinkFooter({ label, link }) {
     </li>
   );
 }
+
+LinkFooter.propTypes = {
+  label: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+};
 
 export default LinkFooter;

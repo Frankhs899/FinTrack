@@ -1,45 +1,35 @@
 import { createContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import {
+  INCOME,
+  createId,
+  loadStoredTransactions,
+  normalizeType,
+  readStoredNumber,
+} from '../lib/transactions';
 
 export const Context = createContext();
 
+const readInitialTheme = () => {
+  const storedTheme = localStorage.getItem('theme');
+  if (storedTheme) {
+    return storedTheme;
+  }
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+  return 'light';
+};
+
 export const GlobalProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    const storedTheme = localStorage.getItem('theme');
-    if (storedTheme) {
-      return storedTheme;
-    }
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    return 'light';
-  });
-
-  const [transactions, setTransactions] = useState(() => {
-    const storedTransactions = localStorage.getItem('transactions');
-    return storedTransactions ? JSON.parse(storedTransactions) : [];
-  });
-
-  const [balance, setBalance] = useState(() => {
-    const storedBalance = localStorage.getItem('balance');
-    return storedBalance ? parseFloat(storedBalance) : 0;
-  });
-
-  const [income, setIncome] = useState(() => {
-    const storedIncome = localStorage.getItem('income');
-    return storedIncome ? parseFloat(storedIncome) : 0;
-  });
-
-  const [expense, setExpense] = useState(() => {
-    const storedExpense = localStorage.getItem('expense');
-    return storedExpense ? parseFloat(storedExpense) : 0;
-  });
+  const [theme, setTheme] = useState(readInitialTheme);
+  const [transactions, setTransactions] = useState(loadStoredTransactions);
+  const [balance, setBalance] = useState(() => readStoredNumber('balance'));
+  const [income, setIncome] = useState(() => readStoredNumber('income'));
+  const [expense, setExpense] = useState(() => readStoredNumber('expense'));
 
   useEffect(() => {
-    if (theme === 'dark') {
-      document.querySelector('html').classList.add('dark');
-    } else {
-      document.querySelector('html').classList.remove('dark');
-    }
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   useEffect(() => {
@@ -50,12 +40,10 @@ export const GlobalProvider = ({ children }) => {
     localStorage.setItem('balance', balance.toString());
   }, [balance]);
 
-  // Guardar income en localStorage cada vez que cambie
   useEffect(() => {
     localStorage.setItem('income', income.toString());
   }, [income]);
 
-  // Guardar expense en localStorage cada vez que cambie
   useEffect(() => {
     localStorage.setItem('expense', expense.toString());
   }, [expense]);
@@ -64,6 +52,35 @@ export const GlobalProvider = ({ children }) => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
+  };
+
+  // Single entry point for adding a movement: it keeps the transaction list and
+  // the stored totals in sync, so no caller has to update them by hand.
+  const addTransaction = (type, { date, description, value }) => {
+    const normalizedType = normalizeType(type);
+    const amount = Number.parseFloat(value);
+    if (!Number.isFinite(amount)) {
+      return;
+    }
+
+    setTransactions((prevTransactions) => [
+      ...prevTransactions,
+      {
+        id: createId(),
+        date,
+        type: normalizedType,
+        description,
+        value: amount,
+      },
+    ]);
+
+    if (normalizedType === INCOME) {
+      setIncome((prevIncome) => prevIncome + amount);
+      setBalance((prevBalance) => prevBalance + amount);
+    } else {
+      setExpense((prevExpense) => prevExpense + amount);
+      setBalance((prevBalance) => prevBalance - amount);
+    }
   };
 
   return (
@@ -75,13 +92,14 @@ export const GlobalProvider = ({ children }) => {
         balance,
         income,
         expense,
-        setTransactions,
-        setBalance,
-        setIncome,
-        setExpense,
+        addTransaction,
       }}
     >
       {children}
     </Context.Provider>
   );
+};
+
+GlobalProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

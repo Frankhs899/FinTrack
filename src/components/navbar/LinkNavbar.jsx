@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 function LinkNavbar({ label, link }) {
   return (
@@ -12,5 +13,10 @@ function LinkNavbar({ label, link }) {
     </li>
   );
 }
+
+LinkNavbar.propTypes = {
+  label: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
+};
 
 export default LinkNavbar;

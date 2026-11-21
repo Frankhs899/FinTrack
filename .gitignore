@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .atl/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

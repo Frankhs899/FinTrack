@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 function TableData({ data }) {
   return (
@@ -7,5 +7,9 @@ function TableData({ data }) {
     </td>
   );
 }
+
+TableData.propTypes = {
+  data: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+};
 
 export default TableData;

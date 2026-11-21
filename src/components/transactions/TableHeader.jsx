@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 function TableHeader({ label }) {
   return (
@@ -7,5 +7,9 @@ function TableHeader({ label }) {
     </th>
   );
 }
+
+TableHeader.propTypes = {
+  label: PropTypes.string.isRequired,
+};
 
 export default TableHeader;
