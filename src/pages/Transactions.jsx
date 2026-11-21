@@ -1,4 +1,3 @@
-import React from 'react';
 import TransactionTable from '../components/transactions/TransactionTable';
 
 function Transactions() {

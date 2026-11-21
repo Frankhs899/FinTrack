@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 function ToggleButton({ toggleMenu }) {
   return (
@@ -24,5 +24,9 @@ function ToggleButton({ toggleMenu }) {
     </button>
   );
 }
+
+ToggleButton.propTypes = {
+  toggleMenu: PropTypes.func.isRequired,
+};
 
 export default ToggleButton;
